@@ -1,0 +1,84 @@
+import tkinter as tk
+from tkinter import font
+import requests
+import datetime
+
+canvas = tk.Tk()
+canvas.geometry("1800x1800")
+canvas.title("TRADOLOGY")
+t = ("poppons", 25, "bold")
+ff = ("poppins", 15 , "bold")
+
+
+label1 = tk.Label(canvas, font = ff, text = "WELCOME INVESTOR")
+label1.pack(pady = 5)
+
+def getdata2():
+    
+ symbol = textfield.get()
+ apii = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol +'&apikey=51FVV10PUS4OH6WS'
+ rr = requests.get(apii).json()
+ exchange11 = rr["Global Quote"]["01. symbol"]
+ exchange22 = rr["Global Quote"]["02. open"]
+ exchange33 = rr["Global Quote"]["03. high"]
+ exchange44 = rr["Global Quote"]["04. low"]
+ exchange55 = rr["Global Quote"]["05. price"]
+ exchange66 = rr["Global Quote"]["06. volume"]
+ label.config(text= " Company Symbol :" + exchange11
+ + " Open Price : " +exchange22
+ + "\n High Price : " +exchange33
+ + " Low : " +exchange44
+ + "\n Price : " + exchange55
+ + " Volume : " + exchange66
+ )
+ 
+
+label2 = tk.Label(canvas, font = ff, text = "1. Enter the company symbol\n2. Enter the currency 1 \n3. Enter the currency 2")
+label2.pack(pady = 5)
+ 
+def getdata():
+    currency1 = textfield1.get()
+    currency2 = textfield2.get()
+    api = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency='+currency1+'&to_currency='+currency2+'&apikey=51FVV10PUS4OH6WS'
+    r = requests.get(api).json()
+    exchange1 = r["Realtime Currency Exchange Rate"]["1. From_Currency Code"]
+    exchange2 = r["Realtime Currency Exchange Rate"]["2. From_Currency Name"]
+    exchange3 = r["Realtime Currency Exchange Rate"]["3. To_Currency Code"]
+    exchange4 = r["Realtime Currency Exchange Rate"]["4. To_Currency Name"]
+    exchange5 = r["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
+    exchange6 = r["Realtime Currency Exchange Rate"]["6. Last Refreshed"]
+    label.config(text= "from currency code :" + exchange1 
+    + "\nfrom Currency Name : " +exchange2
+    + "\nto Currency Name : " +exchange3
+    + "\nto Currency code : " +exchange4
+    + "\nexchange rate : " + exchange5
+    + "\nlast refreshed : " + exchange6
+    )
+
+
+
+textfield = tk.Entry(canvas, font = t)
+textfield.pack(pady=20)
+textfield.focus()
+textfield.bind('<Return>', getdata2)
+
+textfield1 = tk.Entry(canvas, font = t)
+textfield1.pack(pady=10)
+textfield1.focus()
+textfield1.bind('<Return>', getdata)
+
+textfield2 = tk.Entry(canvas, font = t)
+textfield2.pack(pady=20)
+textfield2.focus()
+textfield2.bind('<Return>', getdata)
+ff = ("poppins", 15 , "bold")
+button1 = tk.Button(canvas, font = ff,text = "GET STOCK PRICE", command=getdata2)
+button1.pack(padx = 10)
+button1 = tk.Button(canvas, font = ff,text = "GET EXCHANGE RATE", command=getdata)
+button1.pack(padx = 10)
+
+
+label = tk.Label(canvas, font = ff)
+label.pack(pady = 20)
+
+canvas.mainloop()
